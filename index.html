@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Coder - NPTEL Java Victory!</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Tone.js for sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for dramatic effect */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0d1f; /* Deep dark background */
+            overflow: hidden; /* Hide potential scrollbars from particles */
+        }
+        
+        .hero-text {
+            /* Initial state */
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 2s ease-in-out, transform 2s ease-in-out;
+            text-shadow: 0 0 10px rgba(255, 255, 0, 0.5), 0 0 20px rgba(255, 140, 0, 0.3);
+            line-height: 1.2;
+        }
+
+        .hero-text.reveal {
+            /* Final state - mass reveal */
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .glow-title {
+            animation: pulse-glow 1.5s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            from {
+                text-shadow: 0 0 5px rgba(255, 223, 0, 0.8), 0 0 10px rgba(255, 165, 0, 0.5);
+                transform: scale(1);
+            }
+            to {
+                text-shadow: 0 0 15px rgba(255, 223, 0, 1), 0 0 25px rgba(255, 140, 0, 0.8);
+                transform: scale(1.02);
+            }
+        }
+        
+        /* Simple particle background animation */
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background-color: #ffaa00;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particle-burst 2s ease-out forwards;
+        }
+
+        @keyframes particle-burst {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(0);
+                opacity: 0;
+            }
+        }
+
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- Main Content Container -->
+    <div id="content-container" class="w-full max-w-4xl text-center z-10 relative">
+
+        <div id="initial-screen" class="flex flex-col items-center justify-center p-8 bg-gray-800/70 backdrop-blur-sm rounded-xl shadow-2xl transition-opacity duration-1000">
+            <h1 class="text-4xl sm:text-5xl font-extrabold mb-8 text-yellow-400">
+                A Mass Message Awaits...
+            </h1>
+            <p class="text-gray-300 mb-6 text-lg">
+                Your NPTEL Java results have arrived! Hit the button to witness the celebration.
+            </p>
+            <button id="reveal-button" 
+                    class="px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold text-xl rounded-full shadow-lg transition duration-300 transform hover:scale-105 active:scale-95 border-4 border-yellow-500">
+                Start the Fanfare!
+            </button>
+        </div>
+
+        <div id="celebration-screen" class="hidden">
+            
+            <!-- Main Title (Pulsing Glow) -->
+            <h1 class="text-4xl sm:text-7xl font-black mb-8 glow-title text-yellow-400 uppercase tracking-widest">
+                JAVA NPTEL VICTORY
+            </h1>
+
+            <!-- Friend's Name Placeholder -->
+            <h2 class="text-2xl sm:text-4xl font-extrabold mb-12 text-white hero-text" id="friend-name">
+                To Our Master Coder, [FRIEND'S NAME HERE]
+            </h2>
+
+            <!-- Powerful English Dialogue -->
+            <p class="text-2xl sm:text-5xl font-bold text-gray-100 hero-text pt-6" id="tamil-dialogue">
+                Congratulations! You haven't merely cleared the NPTEL exam; you have dominated the realm of Java. The compiler bows to your command, and the world awaits your code. You are the 'Master Coder'!
+            </p>
+            
+        </div>
+    </div>
+    
+    <!-- Particle Container -->
+    <div id="particle-container" class="absolute inset-0 z-0 pointer-events-none"></div>
+
+    <script>
+        // --- Configuration and Elements ---
+        const friendNameElement = document.getElementById('friend-name');
+        const mainDialogueElement = document.getElementById('tamil-dialogue'); // Renamed in comment for clarity, but ID kept for minimal change
+        const revealButton = document.getElementById('reveal-button');
+        const initialScreen = document.getElementById('initial-screen');
+        const celebrationScreen = document.getElementById('celebration-screen');
+        const particleContainer = document.getElementById('particle-container');
+
+        // IMPORTANT: Replace the placeholder text with your friend's name!
+        friendNameElement.textContent = "To Our Master Coder, " + "Rakshan"; 
+        
+        // --- Sound Effect Setup (Tone.js) ---
+
+        // Simple Fanfare setup: Two synth notes (C4, G4) and a drum beat
+        const synth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: "square" },
+            envelope: {
+                attack: 0.05,
+                decay: 0.5,
+                sustain: 0.1,
+                release: 1
+            }
+        }).toDestination();
+        
+        const hihat = new Tone.NoiseSynth({
+            noise: { type: "white" },
+            envelope: {
+                attack: 0.001,
+                decay: 0.1,
+                sustain: 0,
+            }
+        }).toDestination();
+
+        function playFanfare() {
+            // Ensure audio context is started (required for most browsers on first user interaction)
+            if (Tone.context.state !== 'running') {
+                Tone.start();
+            }
+
+            // Play the triumphant chords
+            synth.triggerAttackRelease(["C4", "E4", "G4", "C5"], "1.5s", "+0");
+            synth.triggerAttackRelease(["F4", "A4", "C5", "F5"], "1s", "+0.7");
+            synth.triggerAttackRelease(["G4", "B4", "D5", "G5"], "2s", "+1.2");
+
+            // Add a rhythmic hit for impact
+            for (let i = 0; i < 4; i++) {
+                hihat.triggerAttackRelease("16n", `+${i * 0.1}`);
+            }
+        }
+
+        // --- Animation/Visual Effects ---
+
+        function createParticleBurst() {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            for (let i = 0; i < 50; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+
+                // Random position near the center
+                const x = centerX + (Math.random() - 0.5) * 50;
+                const y = centerY + (Math.random() - 0.5) * 50;
+                
+                // Random destination (spread out)
+                const targetX = (Math.random() - 0.5) * 500;
+                const targetY = (Math.random() - 0.5) * 500;
+
+                p.style.left = `${x}px`;
+                p.style.top = `${y}px`;
+                p.style.setProperty('--x', `${targetX}px`);
+                p.style.setProperty('--y', `${targetY}px`);
+
+                particleContainer.appendChild(p);
+
+                // Remove particle after animation ends
+                p.onanimationend = () => p.remove();
+            }
+        }
+        
+        // --- Main Logic ---
+
+        function handleReveal() {
+            // 1. Hide initial screen and show celebration screen
+            initialScreen.style.opacity = '0';
+            setTimeout(() => {
+                initialScreen.classList.add('hidden');
+                celebrationScreen.classList.remove('hidden');
+                celebrationScreen.style.opacity = '0';
+                
+                // 2. Trigger Sound
+                playFanfare();
+                
+                // 3. Trigger Particle Burst
+                createParticleBurst();
+
+                // 4. Reveal Text with a slight delay
+                setTimeout(() => {
+                    celebrationScreen.style.opacity = '1';
+                    friendNameElement.classList.add('reveal');
+                    mainDialogueElement.classList.add('reveal');
+                }, 500);
+
+            }, 1000); // Wait for fade out
+        }
+
+        revealButton.addEventListener('click', handleReveal);
+
+    </script>
+</body>
+</html>
