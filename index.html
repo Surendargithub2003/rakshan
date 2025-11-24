@@ -13,16 +13,26 @@
         /* Custom styles for dramatic effect */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0d0d1f; /* Deep dark background */
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0d0d1f 100%); /* Dark, modern gradient */
             overflow: hidden; /* Hide potential scrollbars from particles */
         }
         
+        /* Charged Button Shadow Effect */
+        #reveal-button {
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px #ffeb3b, 0 0 15px #ffc107;
+        }
+        #reveal-button:hover {
+            box-shadow: 0 0 10px #ffeb3b, 0 0 30px #ffc107, 0 0 50px #ff9800;
+        }
+
         .hero-text {
             /* Initial state */
             opacity: 0;
             transform: scale(0.8);
-            transition: opacity 2s ease-in-out, transform 2s ease-in-out;
-            text-shadow: 0 0 10px rgba(255, 255, 0, 0.5), 0 0 20px rgba(255, 140, 0, 0.3);
+            transition: opacity 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            /* Neon Cyan/Aqua Shadow */
+            text-shadow: 0 0 5px #0ff, 0 0 15px #0ff, 0 0 25px rgba(0, 255, 255, 0.5);
             line-height: 1.2;
         }
 
@@ -33,6 +43,7 @@
         }
 
         .glow-title {
+            /* Pulsing effect for the main title */
             animation: pulse-glow 1.5s infinite alternate;
         }
 
@@ -47,12 +58,12 @@
             }
         }
         
-        /* Simple particle background animation */
+        /* Particle Background Animation - Now Cyberpunk Cyan */
         .particle {
             position: absolute;
             width: 3px;
             height: 3px;
-            background-color: #ffaa00;
+            background-color: #0ff; /* Cyan/Aqua */
             border-radius: 50%;
             opacity: 0;
             animation: particle-burst 2s ease-out forwards;
@@ -76,15 +87,15 @@
     <!-- Main Content Container -->
     <div id="content-container" class="w-full max-w-4xl text-center z-10 relative">
 
-        <div id="initial-screen" class="flex flex-col items-center justify-center p-8 bg-gray-800/70 backdrop-blur-sm rounded-xl shadow-2xl transition-opacity duration-1000">
-            <h1 class="text-4xl sm:text-5xl font-extrabold mb-8 text-yellow-400">
-                A Mass Message Awaits...
+        <div id="initial-screen" class="flex flex-col items-center justify-center p-8 bg-gray-900/80 backdrop-blur-md rounded-2xl shadow-2xl transition-opacity duration-1000 border border-yellow-500/50">
+            <h1 class="text-3xl sm:text-4xl font-extrabold mb-8 text-yellow-400 uppercase tracking-wider">
+                COMMENCING NPTEL PROTOCOL...
             </h1>
-            <p class="text-gray-300 mb-6 text-lg">
-                Your NPTEL Java results have arrived! Hit the button to witness the celebration.
+            <p class="text-gray-300 mb-6 text-lg font-mono">
+                Your Java results have been verified. Prepare for the mass celebration sequence.
             </p>
             <button id="reveal-button" 
-                    class="px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold text-xl rounded-full shadow-lg transition duration-300 transform hover:scale-105 active:scale-95 border-4 border-yellow-500">
+                    class="px-8 py-4 bg-yellow-400 text-gray-900 font-black text-xl rounded-full uppercase transition duration-300 transform hover:scale-105 active:scale-95">
                 Start the Fanfare!
             </button>
         </div>
@@ -96,13 +107,13 @@
                 JAVA NPTEL VICTORY
             </h1>
 
-            <!-- Friend's Name Placeholder -->
-            <h2 class="text-2xl sm:text-4xl font-extrabold mb-12 text-white hero-text" id="friend-name">
-                To Our Master Coder, [FRIEND'S NAME HERE]
+            <!-- Rakshan Name Reveal - HUGE IMPACT -->
+            <h2 class="text-6xl sm:text-9xl font-black mb-12 text-red-500 hero-text" id="friend-name">
+                <!-- Name will be injected here for surprise -->
             </h2>
 
             <!-- Powerful English Dialogue -->
-            <p class="text-2xl sm:text-5xl font-bold text-gray-100 hero-text pt-6" id="tamil-dialogue">
+            <p class="text-xl sm:text-4xl font-bold text-cyan-300 hero-text pt-6" id="tamil-dialogue">
                 Congratulations! You haven't merely cleared the NPTEL exam; you have dominated the realm of Java. The compiler bows to your command, and the world awaits your code. You are the 'Master Coder'!
             </p>
             
@@ -115,14 +126,14 @@
     <script>
         // --- Configuration and Elements ---
         const friendNameElement = document.getElementById('friend-name');
-        const mainDialogueElement = document.getElementById('tamil-dialogue'); // Renamed in comment for clarity, but ID kept for minimal change
+        const mainDialogueElement = document.getElementById('tamil-dialogue'); 
         const revealButton = document.getElementById('reveal-button');
         const initialScreen = document.getElementById('initial-screen');
         const celebrationScreen = document.getElementById('celebration-screen');
         const particleContainer = document.getElementById('particle-container');
 
-        // IMPORTANT: Replace the placeholder text with your friend's name!
-        friendNameElement.textContent = "To Our Master Coder, " + "Rakshan"; 
+        // *** SURPRISE REVEAL: We set the name as the text content here ***
+        friendNameElement.textContent = "RAKSHAN"; 
         
         // --- Sound Effect Setup (Tone.js) ---
 
@@ -212,7 +223,7 @@
                 // 4. Reveal Text with a slight delay
                 setTimeout(() => {
                     celebrationScreen.style.opacity = '1';
-                    friendNameElement.classList.add('reveal');
+                    friendNameElement.classList.add('reveal'); 
                     mainDialogueElement.classList.add('reveal');
                 }, 500);
 
